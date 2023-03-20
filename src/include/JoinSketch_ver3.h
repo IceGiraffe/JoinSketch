@@ -198,6 +198,7 @@ public:
 			cout << endl;
 		}
 	}
+
 	Short_C_Sketch(int _w, int _d, int _hash_seed = 1000)
 	{
 		d = _d, w = _w / _d / 2;
@@ -225,42 +226,11 @@ public:
 			g = xis[i]->element(converted_id);
 			if (i == 0)
 				cout << i << " " << index[i] << " " << converted_id << " " << g << " " << endl;
-			if (g == 1)
+			if (counter[i][index[i]] != MAX_CNT && counter[i][index[i]] != MIN_CNT)
 			{
-				if (counter[i][index[i]] != MAX_CNT)
-				{
-					counter[i][index[i]] += k;
-				}
-			}
-			else
-			{
-				if (counter[i][index[i]] != MIN_CNT)
-				{
-					counter[i][index[i]] -= k;
-				}
+				counter[i][index[i]] += k * g;
 			}
 		}
-	}
-	// void InsertRange(unsigned st, unsigned ed){
-	// 	int st_idx = st;
-	// 	int ed_idx = ed % w;
-	// 	int st_id =
-	// }
-	long double Join(Short_C_Sketch *other)
-	{
-		long double res[MAX_HASH_NUM];
-		for (int i = 0; i < d; i++)
-		{
-			long double k = 0;
-			for (int j = 0; j < w; j++)
-				k += 1ll * counter[i][j] * other->counter[i][j];
-			res[i] = k;
-		}
-		sort(res, res + d);
-		if (d % 2 == 0)
-			return ((res[d / 2] + res[d / 2 - 1]) / 2);
-		else
-			return (res[d / 2]);
 	}
 
 	// st <= ed
@@ -271,7 +241,7 @@ public:
 		int st_id = st / w;
 		int ed_id = ed / w;
 		// only one row
-		cout << st_bucket << " " << ed_bucket<< " " << st_id << " " << ed_id << endl;
+		cout << st_bucket << " " << ed_bucket << " " << st_id << " " << ed_id << endl;
 		if (st_id == ed_id)
 		{
 			for (int j = 0; j < d; j++)
@@ -343,6 +313,24 @@ public:
 			}
 		}
 	}
+
+	long double Join(Short_C_Sketch *other)
+	{
+		long double res[MAX_HASH_NUM];
+		for (int i = 0; i < d; i++)
+		{
+			long double k = 0;
+			for (int j = 0; j < w; j++)
+				k += 1ll * counter[i][j] * other->counter[i][j];
+			res[i] = k;
+		}
+		sort(res, res + d);
+		if (d % 2 == 0)
+			return ((res[d / 2] + res[d / 2 - 1]) / 2);
+		else
+			return (res[d / 2]);
+	}
+
 	int Query(unsigned id) const
 	{
 		int temp;
