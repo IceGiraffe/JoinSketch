@@ -8,7 +8,8 @@
 
 #define KEY_LEN 4
 
-#define testcycles 100
+// #define testcycles 100
+#define testcycles 10
 
 #define fingerprint 997
 

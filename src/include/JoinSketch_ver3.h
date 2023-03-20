@@ -1,4 +1,7 @@
 #include "MurmurHash.h"
+#include "../xis/xis.h"
+#include "../xis/xis.cpp"
+
 # include "params.h"
 # include <iostream>
 # include <string.h>
@@ -151,6 +154,7 @@ public:
 	int w, d;
 	int index[MAX_HASH_NUM];
 	int* counter[MAX_HASH_NUM];
+	Xi_BCH3 * xis[MAX_HASH_NUM];
 	int MAX_CNT, MIN_CNT, hash_seed;
 public:
 	Short_C_Sketch(int _w, int _d, int _hash_seed = 1000)
@@ -159,6 +163,7 @@ public:
 		hash_seed = _hash_seed;
 		for (int i = 0; i < d; i++)
 		{
+			xis[i] = new Xi_BCH3(hash_seed + i, hash_seed + 0xadef + i);
 			counter[i] = new int[w]();
 			memset(counter[i], 0, sizeof(int) * w);
 		}
@@ -174,6 +179,9 @@ public:
 		{
 			index[i] = ((unsigned)MurmurHash32(&id, 4, hash_seed + i)) % w;
 			g =((unsigned) MurmurHash32(&id, 4, hash_seed + i + d)) % 2;
+			// index[i] = id % w;
+			// int converted_id = id / w;
+			// g = xis[i]->element(id);
 			if (g == 0)
 			{
 				if (counter[i][index[i]] != MAX_CNT)
@@ -190,6 +198,11 @@ public:
 			}
 		}
 	}
+	// void InsertRange(unsigned st, unsigned ed){
+	// 	int st_idx = st;
+	// 	int ed_idx = ed % w;
+	// 	int st_id = 
+	// }
 	long double Join(Short_C_Sketch*other){
 		long double res[MAX_HASH_NUM];
 		for (int i = 0; i < d; i++){
@@ -216,6 +229,9 @@ public:
 			index[i] = ((unsigned)MurmurHash32(&id, 4, hash_seed + i)) % w;
 			temp = counter[i][index[i]];
 			g = ((unsigned)MurmurHash32(&id, 4, hash_seed + i + d)) % 2;
+			// int converted_id = id / w;
+			// index[i] = id % w;
+			// g = xis[i]->element(converted_id);
 
 			res[i] = (g == 0 ? temp : -temp);
 		}

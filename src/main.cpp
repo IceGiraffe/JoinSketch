@@ -21,6 +21,7 @@ int item_num = 0, flow_num = 0;
 vector<double> experiment_MEM, experiment_MAX, experiment_MIN, experiment_ARE, experiment_AAE, experiment_CON, experiment_YangBen, experiment_INT, experiment_JOT;
 vector<vector<double>> experiment_all;
 int data_delimiter;
+
 void readFile_CAIDA(const char *filename, int length = 13, int MAX_ITEM = INT32_MAX)
 {
 	ifstream inFile(filename, ios::binary);
@@ -123,6 +124,7 @@ void readFile_zipf(const char *filename, int length = 4, int MAX_ITEM = INT32_MA
 	cout << "Join Ground Truth = " << Join_Ground_Truth << endl
 		 << endl;
 }
+
 void test_ske(int mem_in_byte, int D, int CHOOSE)
 {
 	int d = D;			 // counts of hash function
@@ -182,8 +184,10 @@ void test_ske(int mem_in_byte, int D, int CHOOSE)
 	experiment_all.push_back(all);
 	cout << "ARE = " << _ARE << ", AAE = " << _AAE << endl;
 }
+
 #include <boost/program_options.hpp>
 using namespace boost::program_options;
+
 void ParseArg(int argc, char *argv[], char *filename, int &len, int &sz, int &CHOOSE)
 {
 	options_description opts("Join Options");
@@ -234,6 +238,7 @@ void ParseArg(int argc, char *argv[], char *filename, int &len, int &sz, int &CH
 		exit(0);
 	}
 }
+
 int main(int argc, char *argv[])
 {
 	char filename[100];
